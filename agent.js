@@ -15,12 +15,12 @@ class WindTurbineSearch extends Tool {
 
   /** @ignore */
   async _call() {
-    const wtgs = await axios.get("https://rtdt-blb.herokuapp.com/wtg/", {
+    const response = await axios.get("https://rtdt-blb.herokuapp.com/wtg/", {
       headers: {
         Authorization: `Token ${process.env.BLB_TOKEN}`,
       },
     });
-    const x = wtgs.data.map((wtg) => ({
+    const wtgs = response.data.map((wtg) => ({
       name: wtg.name,
       status: wtg.status,
       location: wtg.location,
@@ -56,7 +56,7 @@ class WindTurbineSearch extends Tool {
     }));
 
     try {
-      return JSON.stringify(x);
+      return JSON.stringify(wtgs);
     } catch (error) {
       return "I don't know how to do that.";
     }
@@ -70,13 +70,13 @@ class EventSearch extends Tool {
 
   /** @ignore */
   async _call() {
-    const wtgs = await axios.get("https://rtdt-blb.herokuapp.com/wtg/", {
+    const response = await axios.get("https://rtdt-blb.herokuapp.com/wtg/", {
       headers: {
         Authorization: `Token ${process.env.BLB_TOKEN}`,
       },
     });
 
-    const output = wtgs.data.reduce(
+    const events = response.data.reduce(
       (acc, wtg) => [
         ...acc,
         ...wtg.recorded_events.map((event) => ({
@@ -90,7 +90,7 @@ class EventSearch extends Tool {
     );
 
     try {
-      return JSON.stringify(output);
+      return JSON.stringify(events);
     } catch (error) {
       return "I don't know how to do that.";
     }
@@ -103,7 +103,7 @@ class EventAssign extends Tool {
   name = "event-assign";
 
   /** @ignore */
-  async _call(input) {
+  async _call() {
     try {
       return "Event assigned";
     } catch (error) {
@@ -150,7 +150,6 @@ module.exports = async ({ input, sessionId }) => {
     new Calculator(),
     await getPineconeVectorStoreTool(model),
   ];
-
   const executor = await initializeAgentExecutorWithOptions(tools, model, {
     agentType: "openai-functions",
     // verbose: true,
@@ -163,9 +162,6 @@ module.exports = async ({ input, sessionId }) => {
       outputKey: "output",
     }),
   });
-
-  console.log("Loaded agent.");
-  console.log(`Executing with input "${input}"...`);
 
   const result = await executor.call({ input });
 
