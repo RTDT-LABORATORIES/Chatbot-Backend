@@ -1,0 +1,1302 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "RTDT BLB",
+        "version": "1.0.0",
+        "description": "Your project description"
+    },
+    "paths": {
+        "/auth/token": {
+            "post": {
+                "operationId": "auth_token_create",
+                "description": "Takes a set of user credentials and returns an access and refresh JSON web\ntoken pair to prove the authentication of those credentials.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenObtainPair"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenObtainPair"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenObtainPair"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenObtainPair"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/auth/token/refresh": {
+            "post": {
+                "operationId": "auth_token_refresh_create",
+                "description": "Takes a refresh type JSON web token and returns an access type JSON web\ntoken if the refresh token is valid.",
+                "tags": [
+                    "auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRefresh"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRefresh"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRefresh"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenRefresh"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/events": {
+            "get": {
+                "operationId": "events_list",
+                "description": "List events",
+                "tags": [
+                    "events"
+                ],
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Event"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/events/{id}/actions": {
+            "post": {
+                "operationId": "events_actions_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "events"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventActionCreate"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventActionCreate"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventActionCreate"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventActionCreate"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/events/{id}/assignee": {
+            "put": {
+                "operationId": "events_assignee_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "events"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventAssigneeUpdate"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventAssigneeUpdate"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventAssigneeUpdate"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventAssigneeUpdate"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/events/{id}/status": {
+            "put": {
+                "operationId": "events_status_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "events"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventStatusUpdate"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventStatusUpdate"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventStatusUpdate"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventStatusUpdate"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/projects": {
+            "get": {
+                "operationId": "projects_list",
+                "description": "Lists the currently considered types of physical entities.",
+                "tags": [
+                    "projects"
+                ],
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "get": {
+                "operationId": "users_me_list",
+                "description": "Get information about the user that made the request.\nUsable by the frontend to retrieve the user's information",
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/users/search": {
+            "get": {
+                "operationId": "users_search_list",
+                "description": "Search for users",
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/wtgs": {
+            "get": {
+                "operationId": "wtgs_list",
+                "description": "Lists the wind turbines that the user has access to",
+                "tags": [
+                    "wtgs"
+                ],
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/WTG"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/wtgs/{id}/time-series": {
+            "get": {
+                "operationId": "wtgs_time_series_list",
+                "description": "Returns time series data from a wind turbine (sensor signals, analysis methods outputs, health indicators...)",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "wtgs"
+                ],
+                "security": [
+                    {
+                        "tokenAuth": []
+                    },
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "jwtAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/WTG"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DeploymentEnum": {
+                "enum": [
+                    "ONSHORE",
+                    "OFFSHORE"
+                ],
+                "type": "string",
+                "description": "* `ONSHORE` - Onshore\n* `OFFSHORE` - Offshore"
+            },
+            "Diagnostic": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/DiagnosticType"
+                    },
+                    "substructure": {
+                        "$ref": "#/components/schemas/WTGSubstructure"
+                    },
+                    "updates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DiagnosticUpdate"
+                        },
+                        "readOnly": true
+                    },
+                    "severity": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "severity",
+                    "substructure",
+                    "type",
+                    "updates"
+                ]
+            },
+            "DiagnosticSeverity": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "weight": {
+                        "type": "integer",
+                        "title": "Weight (the bigger the more severe)"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "weight"
+                ]
+            },
+            "DiagnosticThreshold": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "threshold": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "value": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "start_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "update": {
+                        "type": "integer",
+                        "title": "Diagnostic update"
+                    },
+                    "hi": {
+                        "type": "integer",
+                        "title": "Health indicator"
+                    }
+                },
+                "required": [
+                    "hi",
+                    "id",
+                    "start_at",
+                    "threshold",
+                    "update",
+                    "value"
+                ]
+            },
+            "DiagnosticType": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "display_name": {
+                        "type": "string",
+                        "maxLength": 250
+                    }
+                },
+                "required": [
+                    "display_name",
+                    "id",
+                    "name"
+                ]
+            },
+            "DiagnosticUpdate": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "thresholds": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DiagnosticThreshold"
+                        },
+                        "readOnly": true
+                    },
+                    "severity": {
+                        "$ref": "#/components/schemas/DiagnosticSeverity"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "diagnostic": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "diagnostic",
+                    "id",
+                    "severity",
+                    "thresholds"
+                ]
+            },
+            "Event": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "assignee": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "type": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EventType"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "wtg": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/WTG"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "actions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventAction"
+                        },
+                        "readOnly": true
+                    },
+                    "diagnostic": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Diagnostic"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "display_id": {
+                        "type": "integer",
+                        "title": "Display ID (starts counting from 1 for each customer)"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/StatusB70Enum"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "actions",
+                    "assignee",
+                    "created_at",
+                    "diagnostic",
+                    "display_id",
+                    "id",
+                    "type",
+                    "wtg"
+                ]
+            },
+            "EventAction": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "author": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Description"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "event": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "author",
+                    "created_at",
+                    "event",
+                    "id",
+                    "text"
+                ]
+            },
+            "EventActionCreate": {
+                "type": "object",
+                "properties": {
+                    "author": {
+                        "type": "integer"
+                    },
+                    "text": {
+                        "type": "string",
+                        "title": "Description"
+                    },
+                    "event": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "author",
+                    "event",
+                    "text"
+                ]
+            },
+            "EventAssigneeUpdate": {
+                "type": "object",
+                "properties": {
+                    "assignee": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                }
+            },
+            "EventStatusUpdate": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/StatusB70Enum"
+                    }
+                }
+            },
+            "EventType": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    }
+                },
+                "required": [
+                    "id",
+                    "name"
+                ]
+            },
+            "Group": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        },
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "id",
+                    "name",
+                    "users"
+                ]
+            },
+            "Project": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "groups": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Group"
+                        },
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "customer": {
+                        "type": "integer",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "groups",
+                    "id",
+                    "name"
+                ]
+            },
+            "Sensor": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "type": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SensorType"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/SensorStatusEnum"
+                    },
+                    "wtg": {
+                        "type": "integer",
+                        "title": "Wind turbine"
+                    }
+                },
+                "required": [
+                    "id",
+                    "type",
+                    "wtg"
+                ]
+            },
+            "SensorChannel": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    }
+                },
+                "required": [
+                    "id",
+                    "name"
+                ]
+            },
+            "SensorStatusEnum": {
+                "enum": [
+                    "WORKING_NORMALLY",
+                    "ERROR",
+                    "OFFLINE"
+                ],
+                "type": "string",
+                "description": "* `WORKING_NORMALLY` - Working normally\n* `ERROR` - Error\n* `OFFLINE` - Offline"
+            },
+            "SensorType": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "channels": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SensorChannel"
+                        },
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    }
+                },
+                "required": [
+                    "channels",
+                    "id",
+                    "name"
+                ]
+            },
+            "StatusB70Enum": {
+                "enum": [
+                    "PENDING",
+                    "IN_PROGRESS",
+                    "ON_HOLD",
+                    "UNRESOLVED",
+                    "RESOLVED",
+                    "REJECTED"
+                ],
+                "type": "string",
+                "description": "* `PENDING` - Pending\n* `IN_PROGRESS` - In progress\n* `ON_HOLD` - On hold\n* `UNRESOLVED` - Unresolved\n* `RESOLVED` - Resolved\n* `REJECTED` - Rejected"
+            },
+            "TokenObtainPair": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "writeOnly": true
+                    },
+                    "password": {
+                        "type": "string",
+                        "writeOnly": true
+                    },
+                    "access": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "refresh": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "access",
+                    "email",
+                    "password",
+                    "refresh"
+                ]
+            },
+            "TokenRefresh": {
+                "type": "object",
+                "properties": {
+                    "access": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "refresh": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                },
+                "required": [
+                    "access",
+                    "refresh"
+                ]
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "password": {
+                        "type": "string",
+                        "maxLength": 128
+                    },
+                    "last_login": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "is_superuser": {
+                        "type": "boolean",
+                        "title": "Superuser status",
+                        "description": "Designates that this user has all permissions without explicitly assigning them."
+                    },
+                    "is_staff": {
+                        "type": "boolean",
+                        "title": "Staff status",
+                        "description": "Designates whether the user can log into this admin site."
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "title": "Active",
+                        "description": "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "email",
+                    "first_name",
+                    "id",
+                    "last_name",
+                    "name",
+                    "password"
+                ]
+            },
+            "WTG": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "oem_model": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/WTGModel"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "farm": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/WindFarm"
+                            }
+                        ],
+                        "readOnly": true
+                    },
+                    "project": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Project"
+                        },
+                        "readOnly": true
+                    },
+                    "sensors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Sensor"
+                        },
+                        "readOnly": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name (canonical name)",
+                        "maxLength": 250
+                    },
+                    "display_name": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "lat": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Latitude"
+                    },
+                    "lng": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Longitude"
+                    },
+                    "projects": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "display_name",
+                    "farm",
+                    "id",
+                    "lat",
+                    "lng",
+                    "name",
+                    "oem_model",
+                    "project",
+                    "sensors",
+                    "status"
+                ]
+            },
+            "WTGModel": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "oem": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "model": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "deployment": {
+                        "$ref": "#/components/schemas/DeploymentEnum"
+                    },
+                    "rated_power_kw": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Rated power (kW)"
+                    },
+                    "rotor_diameter_m": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Rotor diameter (m)"
+                    },
+                    "hub_height_m": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Hub height (m)"
+                    },
+                    "drive": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "cut_in_ws": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Cut in wind speed (m/s)"
+                    },
+                    "rated_ws": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Rated wind speed (m/s)"
+                    },
+                    "cut_out_ws": {
+                        "type": "number",
+                        "format": "double",
+                        "title": "Cut out wind speed (m/s)"
+                    },
+                    "control": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "num_blades": {
+                        "type": "integer",
+                        "title": "Number of blades"
+                    },
+                    "arrangement": {
+                        "type": "string",
+                        "maxLength": 250
+                    }
+                },
+                "required": [
+                    "arrangement",
+                    "control",
+                    "drive",
+                    "id",
+                    "model",
+                    "oem"
+                ]
+            },
+            "WTGSubstructure": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    }
+                },
+                "required": [
+                    "id",
+                    "name"
+                ]
+            },
+            "WindFarm": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "maxLength": 250
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "id",
+                    "name"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "cookieAuth": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "sessionid"
+            },
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "tokenAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization",
+                "description": "Token-based authentication with required prefix \"Token\""
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000"
+        }
+    ]
+}
