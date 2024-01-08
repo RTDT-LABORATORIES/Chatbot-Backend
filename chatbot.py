@@ -6,12 +6,14 @@ from langchain.chains import GraphCypherQAChain, RetrievalQA
 from langchain.agents import AgentType, initialize_agent, Tool
 from langchain.memory import ConversationBufferMemory
 from langchain.chains.openai_functions.openapi import get_openapi_chain
-from langchain.prompts import (
-    PromptTemplate,
-)
 from langchain.vectorstores.neo4j_vector import Neo4jVector
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.prompts import MessagesPlaceholder
+from langchain.prompts import (
+    PromptTemplate,
+    MessagesPlaceholder,
+)
+from langchain_core.messages import SystemMessage
+
 
 # url = "neo4j://localhost:7687"
 # password = "password"
@@ -57,7 +59,9 @@ class Chatbot:
             Instructions:
             Use only the provided relationship types and properties in the schema.
             Do not use any other relationship types or properties that are not provided.
-            When search for users, events and wind turbines by their names, use text similarity search because they might be incomplete and contain typos.
+            When search for users, events and wind turbines by their names,
+            ALWAYS use text similarity search because the names are ALWAYS incomplete and might contain typos.
+            When they asked you for IDs of objects, you must return other information along with it too.
             Schema:
             {schema}
             Note: Do not include any explanations or apologies in your responses.
@@ -105,15 +109,18 @@ class Chatbot:
     def run(self, prompt):
         blb_chain = self._get_blb_chain()
         cypher_chain = self._get_cypher_chain()
-        vector_chain = self._get_vector_chain()
+        # vector_chain = self._get_vector_chain()
 
         tools = [
             Tool(
                 name="BLB",
                 func=blb_chain,
                 description="""
-                    Useful for posting actions, assigning events to users and changing events statuses.
-                    This tool requires that you have in hand the IDs of objects that you can fetch with the Graph tool
+                    Useful for posting event actions, assigning events to users and changing events statuses.
+                    This tool requires that pass the IDs of users, events and wind turbines along with the prompt
+                    and you can use the Graph tool get them.
+                    Always prefix IDs with "ID ".
+                    Use full instruction as input.
                 """,
             ),
             # Tool(
@@ -127,8 +134,8 @@ class Chatbot:
                 name="Graph",
                 func=cypher_chain.run,
                 description="""
-                    Useful ONLY when you need to answer questions about wind turbines, events and users. This tool can only READ information.
-                    Also useful for any sort of aggregation like counting the number of things and traversing. Return fields other than IDs when asked for them.
+                    Useful ONLY when you need to answer questions about wind turbines, events and users.
+                    This tool can only READ information.
                     Use full question as input.
                 """,
             ),
@@ -143,7 +150,12 @@ class Chatbot:
             return_intermediate_steps=True,
             agent_kwargs={
                 "extra_prompt_messages": [
-                    MessagesPlaceholder(variable_name="chat_history")
+                    MessagesPlaceholder(variable_name="chat_history"),
+                    SystemMessage(
+                        content="""
+                            Ask for clarification for the user if you have more than one object with the same name to choose an ID from
+                        """
+                    ),
                 ],
             },
         )
